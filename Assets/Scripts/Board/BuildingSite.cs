@@ -7,9 +7,9 @@ public class BuildingSite
 
     public int Cost { get; private set; }
 
-    public void Buy()
+    public void Buy(Unit buyer)
     {
-
+        Owner = buyer.Id;
     }
 
     public BuildingSite(int cost, int rent)

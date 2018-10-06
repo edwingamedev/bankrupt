@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Wary : Unit
 {
+    private int remainingCoins = 80;
+
     public Wary(int startMoney) : base(startMoney)
     {
         Debug.Log(GetType());
     }
 
-    public override void BuyHouse()
+    public override void WillBuySite(Space space)
     {
-
+        //buys any Building Site if remains 80 coins
+        if((Money - space.buildingSite.Cost) >= remainingCoins)
+        {
+            BuySite(space);
+        }
     }
 }

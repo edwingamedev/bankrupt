@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-public class Unit
+public abstract class Unit
 {
     public int Money { get; private set; }
 
@@ -8,14 +9,30 @@ public class Unit
 
     public int Cost { get; private set; }
 
+    public int Id { get; set; }
+
+    private List<int> properties;
+
     public Unit(int startMoney)
     {
         Money = startMoney;
+
+        properties = new List<int>();
     }
 
-    public virtual void BuyHouse()
-    {
+    public abstract void WillBuySite(Space space);
 
+    public void BuySite(Space space)
+    {
+        //checks if has money to buy site
+        if (Money - space.buildingSite.Cost > 0)
+        {
+            //pays the cost
+            Money -= space.buildingSite.Cost;
+            space.buildingSite.Buy(this);
+
+            properties.Add(space.Location);
+        }
     }
 
     public void RollDice()

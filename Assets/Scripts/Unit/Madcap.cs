@@ -9,8 +9,9 @@ public class Madcap : Unit
         Debug.Log(GetType());
     }
 
-    public override void BuyHouse()
+    public override void WillBuySite(Space space)
     {
-
+        //buys any Building Site
+        BuySite(space);
     }
 }

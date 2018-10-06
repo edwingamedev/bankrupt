@@ -20,6 +20,9 @@ public class UnitPool
         {
             //add to the pool
             Units.Add(GenerateUnit(i % UnitTypes.Count, startMoney));
+
+            //set the id
+            Units[i].Id = i;
         }
     }
 
