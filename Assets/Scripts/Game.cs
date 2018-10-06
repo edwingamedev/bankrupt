@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    //classes
     private Board board;
+    private Bank bank;
+
+    //configs
     private int numOfBoardSpaces = 20;
+    private int lapMoney = 300;
+
+    //file
     private string gameConfigPath;
     private string gameConfigFileNamePath = "\\gameConfig.txt";
 
@@ -15,13 +22,15 @@ public class Game : MonoBehaviour
         Debug.LogFormat("Game Config file path \"{0}\"", @gameConfigPath);
     }
 
-    // Use this for initialization
     void Start()
     {
+        //create a board
         SetupBoard();
+
+        //create a bank
+        bank = new Bank(lapMoney);
     }
 
-    // Update is called once per frame
     void Update()
     {
 
