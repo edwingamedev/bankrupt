@@ -7,10 +7,13 @@ public class Game : MonoBehaviour
     //classes
     private Board board;
     private Bank bank;
+    private UnitPool units;
 
     //configs
+    private int numOfPlayers = 4;
     private int numOfBoardSpaces = 20;
-    private int lapMoney = 300;
+    private int lapMoney = 100;
+    private int startingMoney = 300;
 
     //file
     private string gameConfigPath;
@@ -29,6 +32,9 @@ public class Game : MonoBehaviour
 
         //create a bank
         bank = new Bank(lapMoney);
+
+        //create unit pool
+        units = new UnitPool(numOfPlayers, startingMoney);
     }
 
     void Update()
