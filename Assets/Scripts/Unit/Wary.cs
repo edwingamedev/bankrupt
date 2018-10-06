@@ -14,7 +14,7 @@ public class Wary : Unit
     public override void WillBuySite(Space space)
     {
         //buys any Building Site if remains 80 coins
-        if((Money - space.buildingSite.Cost) >= remainingCoins)
+        if((Coins - space.buildingSite.Cost) >= remainingCoins)
         {
             BuySite(space);
         }

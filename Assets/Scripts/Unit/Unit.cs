@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 public abstract class Unit
 {
-    public int Money { get; private set; }
-
-    public int Rent { get; private set; }
-
-    public int Cost { get; private set; }
+    public int Coins { get; private set; }
 
     public int Id { get; set; }
 
@@ -15,7 +11,7 @@ public abstract class Unit
 
     public Unit(int startMoney)
     {
-        Money = startMoney;
+        Coins = startMoney;
 
         properties = new List<int>();
     }
@@ -25,10 +21,10 @@ public abstract class Unit
     public void BuySite(Space space)
     {
         //checks if has money to buy site
-        if (Money - space.buildingSite.Cost > 0)
+        if (Coins - space.buildingSite.Cost > 0)
         {
             //pays the cost
-            Money -= space.buildingSite.Cost;
+            Coins -= space.buildingSite.Cost;
             space.buildingSite.Buy(this);
 
             properties.Add(space.Location);
@@ -42,16 +38,16 @@ public abstract class Unit
 
     public void AddMoney(int amount)
     {
-        Money += amount;
+        Coins += amount;
     }
 
     public int PayRent(int amount)
     {
-        Money -= amount;
+        Coins -= amount;
 
         //pay the full amount if has money
         //otherwise pay the full money
         //if the unit has less the 0, pay nothing
-        return Money >= 0 ? amount : (Money < 0 ? 0 : Money);
+        return Coins >= 0 ? amount : (Coins < 0 ? 0 : Coins);
     }
 }

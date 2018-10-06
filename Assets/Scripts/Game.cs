@@ -13,7 +13,8 @@ public class Game : MonoBehaviour
     private int numOfPlayers = 4;
     private int numOfBoardSpaces = 20;
     private int lapMoney = 100;
-    private int startingMoney = 300;
+    private int startingMoney = 300; // coins
+    private int gameDuration = 1000; //rounds
 
     //file
     private string gameConfigPath;
