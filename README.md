@@ -5,7 +5,7 @@ It's a Monopoly like game Developed by Edwin Jones Holanda
 
 Unity 2018.2.8f1 is required for running the project.
 
-### Prerequisites
+### Running
 
 To see the simulation, open the Main scene and hit play
 
