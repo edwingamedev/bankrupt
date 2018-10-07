@@ -12,7 +12,7 @@ public class Board
     {
         spaces = new Space[numOfSpaces];
 
-        Debug.Log(string.Format("Board Generated with {0} spaces", spaces.Length));
+        //Debug.Log(string.Format("Board Generated with {0} spaces", spaces.Length));
 
         //Space Setup
         AssignSpacesConfig(gameConfigPath);
@@ -46,6 +46,6 @@ public class Board
                 log += string.Format("Space {0}: Owner: {1}, Cost: {2}, Rent: {3}\n", i, spaces[i].buildingSite.Owner, spaces[i].buildingSite.Cost, spaces[i].buildingSite.Rent);
         }
 
-        Debug.Log(log);
+        //Debug.Log(log);
     }
 }

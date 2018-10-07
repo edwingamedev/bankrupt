@@ -8,6 +8,7 @@ public class Game : MonoBehaviour
     private Board board;
     private Bank bank;
     private UnitPool units;
+    private GameStatistics gameStatistics;
 
     //configs
     private int numOfPlayers = 4;
@@ -15,15 +16,13 @@ public class Game : MonoBehaviour
     private int lapMoney = 100;
     private int startingMoney = 300; // coins
     private int gameDuration = 1000; //rounds 1000
-    private int numOfMatchs = 1;// 300;
+    private int numOfMatchs = 300;// 300;
     private int numOfDiceFaces = 6;
 
     //file
     private string gameConfigPath;
     private string gameConfigFileNamePath = "\\gameConfig.txt";
 
-
-    //
     private bool hasWinner = false;
 
     private void Awake()
@@ -34,11 +33,16 @@ public class Game : MonoBehaviour
 
     void Start()
     {
+        //create statistics
+        gameStatistics = new GameStatistics();
+
         //Play game for a num of Matchs
-        for (int k = 0; k < numOfMatchs; k++)
+        for (int i = 0; i < numOfMatchs; i++)
         {
             NewGame();
         }
+
+        gameStatistics.ShowStatistics();
     }
 
     public void NewGame()
@@ -68,7 +72,7 @@ public class Game : MonoBehaviour
         //Turns
         for (int i = 0; i < gameDuration; i++)
         {
-            Debug.LogWarning((i + 1) + " Turn");
+           // Debug.LogWarning((i + 1) + " Turn");
 
             //Each Player Turn
             for (int j = 0; j < units.NumOfPlayers(); j++)
@@ -116,9 +120,19 @@ public class Game : MonoBehaviour
             //checks if has winner
             if (hasWinner)
             {
+                gameStatistics.AddTurn(i);
                 break;
             }
         }
+
+        //statistics duration
+        if (!hasWinner)
+        {
+            gameStatistics.AddTurn(gameDuration);
+        }
+
+        //statistics timed out
+        gameStatistics.AddTimeOut(!hasWinner);
 
         ShowResults();
     }
@@ -153,7 +167,7 @@ public class Game : MonoBehaviour
     {
         Unit _unit;
         Unit winner = units.GetUnitByIndex(0);
-        Debug.LogWarning("Results " + (!hasWinner ? "timed out" : ""));
+        //Debug.LogWarning("Results " + (!hasWinner ? "timed out" : ""));
 
         for (int i = 0; i < units.NumOfPlayers(); i++)
         {
@@ -165,15 +179,13 @@ public class Game : MonoBehaviour
                 winner = _unit;
             }
 
-            Debug.LogFormat("Unit {0}: ${1}, #{2}", _unit.Id, _unit.Coins, _unit.properties.Count);
-
-            //for (int j = 0; j < _unit.properties.Count; j++)
-            //{
-            //    Debug.LogFormat("Property:{0} ", _unit.properties[j]);
-            //}
+           // Debug.LogFormat("{0} {1}: ${2}, properties #{3}", _unit, _unit.Id, _unit.Coins, _unit.properties.Count);
         }
 
-        Debug.LogFormat("Winner Unit {0}", winner.Id);
+        //statistics winner
+        gameStatistics.AddWinner(winner);
+
+        //Debug.LogFormat("Winner {0} {1}", winner, winner.Id);
     }
 
     private void SetupBoard()
