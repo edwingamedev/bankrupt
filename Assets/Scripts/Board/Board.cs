@@ -32,7 +32,7 @@ public class Board
             string cost = lines[i].Substring(0, lines[i].IndexOf(' '));
             string rent = lines[i].Substring(lines[i].LastIndexOf(' '));
 
-            spaces[i] = new Space(int.Parse(cost), int.Parse(rent), i);
+            spaces[i] = new Space(int.Parse(cost), int.Parse(rent));
         }
     }
 

@@ -6,17 +6,21 @@ public class Picky : Unit
 {
     private int rentRequired = 50;
 
-    public Picky(int startMoney) : base(startMoney)
+    public Picky(int startMoney, OnBankrupt onBankrupt) : base(startMoney, onBankrupt)
     {
-        Debug.Log(GetType());
+        ///Debug.Log(GetType());
     }
 
-    public override void WillBuySite(Space space)
+    public override void WillBuySite(BuildingSite buildingSite)
     {
         //buys any Building Site with rent > 50
-        if (space.buildingSite.Rent > rentRequired)
+        if (buildingSite.Rent > rentRequired)
         {
-            BuySite(space);
+            BuySite(buildingSite);
+        }
+        else
+        {
+            ///Debug.LogFormat("Unit {0}, decided not to buy site {1}", Id, Location);
         }
     }
 }

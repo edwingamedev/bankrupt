@@ -1,4 +1,6 @@
-﻿public class Bank
+﻿using UnityEngine;
+
+public class Bank
 {
     //The amount for each lap completed 
     public int LapMoney { get; private set; }
@@ -8,10 +10,12 @@
         LapMoney = lapAmount;
     }
 
-    public void PayRent(Unit lodger, Unit owner, Space space)
+    public void PayRent(Unit lodger, Unit owner, BuildingSite buildingSite)
     {
         //value to be payed
-        int rent = space.buildingSite.Rent;
+        int rent = buildingSite.Rent;
+
+        ///Debug.LogFormat("Unit {0} payed {1} rent to Unit {2}", lodger.Id, rent, owner.Id);
 
         //pay rent
         int amountPayed = lodger.PayRent(rent);

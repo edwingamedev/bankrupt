@@ -12,6 +12,11 @@ public class BuildingSite
         Owner = buyer.Id;
     }
 
+    public void Return()
+    {
+        Owner = -1;
+    }
+
     public BuildingSite(int cost, int rent)
     {
         Cost = cost;

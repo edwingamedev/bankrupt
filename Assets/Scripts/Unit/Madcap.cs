@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Madcap : Unit
 {
-    public Madcap(int startMoney) : base(startMoney)
+    public Madcap(int startMoney, OnBankrupt onBankrupt) : base(startMoney, onBankrupt)
     {
-        Debug.Log(GetType());
+        ///Debug.Log(GetType());
     }
 
-    public override void WillBuySite(Space space)
+    public override void WillBuySite(BuildingSite buildingSite)
     {
         //buys any Building Site
-        BuySite(space);
+        BuySite(buildingSite);
     }
 }

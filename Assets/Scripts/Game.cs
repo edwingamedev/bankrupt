@@ -14,11 +14,17 @@ public class Game : MonoBehaviour
     private int numOfBoardSpaces = 20;
     private int lapMoney = 100;
     private int startingMoney = 300; // coins
-    private int gameDuration = 1000; //rounds
+    private int gameDuration = 1000; //rounds 1000
+    private int numOfMatchs = 1;// 300;
+    private int numOfDiceFaces = 6;
 
     //file
     private string gameConfigPath;
     private string gameConfigFileNamePath = "\\gameConfig.txt";
+
+
+    //
+    private bool hasWinner = false;
 
     private void Awake()
     {
@@ -28,6 +34,18 @@ public class Game : MonoBehaviour
 
     void Start()
     {
+        //Play game for a num of Matchs
+        for (int k = 0; k < numOfMatchs; k++)
+        {
+            NewGame();
+        }
+    }
+
+    public void NewGame()
+    {
+        //reset winner
+        hasWinner = false;
+
         //create a board
         SetupBoard();
 
@@ -35,12 +53,127 @@ public class Game : MonoBehaviour
         bank = new Bank(lapMoney);
 
         //create unit pool
-        units = new UnitPool(numOfPlayers, startingMoney);
+        units = new UnitPool(numOfPlayers, startingMoney, BankRupt);
+
+        //play game
+        Play();
     }
 
-    void Update()
+    private void Play()
     {
+        Unit _unit;
+        BuildingSite _site;
+        int _newPosition;
 
+        //Turns
+        for (int i = 0; i < gameDuration; i++)
+        {
+            Debug.LogWarning((i + 1) + " Turn");
+
+            //Each Player Turn
+            for (int j = 0; j < units.NumOfPlayers(); j++)
+            {
+                //get a unit
+                _unit = units.GetUnitByIndex(j);
+
+                //roll dice and store new position
+                _newPosition = _unit.RollDice(numOfDiceFaces);
+
+                //move to new position clamping board spaces
+                _unit.Move(_newPosition % numOfBoardSpaces);
+
+                //checks for lap completion
+                if (_newPosition >= numOfBoardSpaces)
+                {
+                    //receve money
+                    bank.ReceiveMoneyForCompleteLap(_unit);
+
+                    ///Debug.LogFormat("Unit {0}: received ${1}", _unit.Id, lapMoney);
+                }
+
+                //check buildingSite position
+                _site = board.spaces[_unit.Location].buildingSite;
+
+                //checks if property dont have a owner
+                if (_site.Owner == -1)
+                {
+                    //no owner property
+                    _unit.WillBuySite(_site);
+                }
+                else if (_site.Owner != _unit.Id)
+                {
+                    bank.PayRent(_unit, units.GetUnitById(_site.Owner), _site);
+                }
+
+                //checks if has winner
+                if (units.NumOfPlayers() <= 1)
+                {
+                    hasWinner = true;
+                    break;
+                }
+            }
+
+            //checks if has winner
+            if (hasWinner)
+            {
+                break;
+            }
+        }
+
+        ShowResults();
+    }
+
+    private void BankRupt(int id)
+    {
+        Unit unit = units.GetUnitById(id);
+
+        //Debug.LogWarning("#" + unit.properties.Count);
+
+        //return to properties for purchase
+        for (int i = unit.properties.Count; i > 0; i--)
+        {
+            //Debug.LogWarningFormat("return property {0}", unit.properties[i - 1]);
+
+            //return site
+            board.spaces[unit.properties[i - 1]].buildingSite.Return();
+
+        }
+
+        for (int i = unit.properties.Count; i > 0; i--)
+        {
+            //remove from unit
+            unit.properties.Remove(i);
+        }
+
+        //remove unit from pool
+        units.RemoveUnit(id);
+    }
+
+    private void ShowResults()
+    {
+        Unit _unit;
+        Unit winner = units.GetUnitByIndex(0);
+        Debug.LogWarning("Results " + (!hasWinner ? "timed out" : ""));
+
+        for (int i = 0; i < units.NumOfPlayers(); i++)
+        {
+            _unit = units.GetUnitByIndex(i);
+
+            //assign winner
+            if (_unit.Coins > winner.Coins)
+            {
+                winner = _unit;
+            }
+
+            Debug.LogFormat("Unit {0}: ${1}, #{2}", _unit.Id, _unit.Coins, _unit.properties.Count);
+
+            //for (int j = 0; j < _unit.properties.Count; j++)
+            //{
+            //    Debug.LogFormat("Property:{0} ", _unit.properties[j]);
+            //}
+        }
+
+        Debug.LogFormat("Winner Unit {0}", winner.Id);
     }
 
     private void SetupBoard()

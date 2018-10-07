@@ -12,18 +12,28 @@ public class UnitPool
         CreatePool();
     }
 
-    public UnitPool(int numOfPlayers, int startMoney)
+    public UnitPool(int numOfPlayers, int startMoney, Unit.OnBankrupt onBankrupt)
     {
         CreatePool();
 
         for (int i = 0; i < numOfPlayers; i++)
         {
             //add to the pool
-            Units.Add(GenerateUnit(i % UnitTypes.Count, startMoney));
+            Units.Add(GenerateUnit(i % UnitTypes.Count, startMoney, onBankrupt));
 
             //set the id
             Units[i].Id = i;
         }
+    }
+
+    public int NumOfPlayers()
+    {
+        return Units.Count;
+    }
+
+    public void RemoveUnit(int id)
+    {
+        Units.Remove(Units.Find(unit => unit.Id == id));
     }
 
     private void CreatePool()
@@ -33,13 +43,13 @@ public class UnitPool
         ShuffleTypes();
     }
 
-    private Unit GenerateUnit(int index, int startMoney)
+    private Unit GenerateUnit(int index, int startMoney, Unit.OnBankrupt onBankrupt)
     {
         // get public constructors
         ConstructorInfo[] ctors = UnitTypes[index].GetConstructors();
 
         // invoke the first public constructor with no parameters.
-        return (Unit)ctors[0].Invoke(new object[] { startMoney });
+        return (Unit)ctors[0].Invoke(new object[] { startMoney, onBankrupt });
     }
 
     private void ShuffleTypes()
@@ -56,8 +66,13 @@ public class UnitPool
         }
     }
 
-    public Unit GetUnit(int index)
+    public Unit GetUnitByIndex(int index)
     {
         return Units[index];
+    }
+
+    public Unit GetUnitById(int id)
+    {
+        return Units.Find(unit => unit.Id == id);
     }
 }
