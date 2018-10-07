@@ -18,9 +18,9 @@ public class Wary : Unit
         {
             BuySite(buildingSite);
         }
-        else
-        {
-           /// Debug.LogFormat("Unit {0}, decided not to buy site {1}", Id, Location);
-        }
+        //else
+        //{
+        //   /// Debug.LogFormat("Unit {0}, decided not to buy site {1}", Id, Location);
+        //}
     }
 }
